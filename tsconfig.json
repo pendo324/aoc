@@ -1,0 +1,13 @@
+{
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "module": "esnext",
+    "strict": false,
+    "forceConsistentCasingInFileNames": false,
+    "moduleResolution": "Node"
+  },
+
+  "include": ["./years/**/**/*", "./utils/*"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@pendo324/aoc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "3": "cd ./years/2020/03 && npm run test",
+    "create-day": "cd ./utils && npm run create-day"
+  },
+  "author": "pendo324",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.7",
+    "@types/node": "^14.14.10"
+  },
+  "workspaces": [
+    "./utils/",
+    "./utils/**",
+    "./years/**/**/"
+  ],
+  "dependencies": {
+    "ts-node": "^9.1.0",
+    "typescript": "^4.1.2"
+  }
+}
