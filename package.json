@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "3": "cd ./years/2020/03 && npm run test",
+    "4": "cd ./years/2020/04 && npm run test",
     "create-day": "cd ./utils && npm run create-day"
   },
   "author": "pendo324",
