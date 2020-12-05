@@ -7,9 +7,7 @@ import got from 'got';
 import * as dotenv from 'dotenv';
 import { CookieJar } from 'tough-cookie';
 
-// TODO: figure out a better way to get TypeScript to like local imports with extensions
-// @ts-ignore
-import { capturePage } from './page-to-markdown.ts';
+import { capturePage } from './page-to-markdown';
 
 dotenv.config();
 

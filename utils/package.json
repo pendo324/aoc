@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "create-day": "node --no-warnings --loader ts-node/esm ./create-new-day.ts"
+    "create-day": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./create-new-day.ts"
   },
   "type": "module",
   "devDependencies": {
