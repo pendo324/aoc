@@ -1,40 +1,60 @@
-import cheerio from 'cheerio';
 import { gfm } from 'turndown-plugin-gfm';
 import TurndownService from 'turndown';
 
-const { load } = cheerio;
+// TODO: replace with JSDom once JSDom works with ESModules https://github.com/jsdom/jsdom/issues/2475
+// OR, find out why h2 element can't be selected properly
+import { Window } from 'happy-dom';
 
-export const capturePage = (body: string, originalUrl: string) => {
-  const document = load(body);
-  const newDocument = load('');
+export const capturePage = (htmlString: string, originalUrl: string) => {
+  const window = new Window();
+  const originalDocument = window.document;
 
-  let dayTitle: string;
-  document(`article`).each((index, article) => {
-    const headingElement = document(article).find('h2');
-    let headingElementText = headingElement.text();
-    let newHeadingElementText = headingElementText.replaceAll('---', '').trim();
+  const newWindow = new Window();
+  const newDocument = newWindow.document;
 
-    if (index === 0) {
-      dayTitle = newHeadingElementText;
-      newHeadingElementText = 'Part One';
+  originalDocument.documentElement.replaceWith(htmlString);
+
+  const articles = originalDocument.querySelectorAll('article');
+  for (const [i, article] of articles.entries()) {
+    // I have no idea why article.querySelector and getElementsByTagName don't work here...
+    // const headerElement = article.querySelector('h2');
+    const headerElement = article.children.filter(
+      (c) => c.nodeName === 'H2'
+    )[0];
+    const headerText = headerElement.textContent.replaceAll('---', '').trim();
+
+    const partHeader = newDocument.createElement('h3');
+    if (i === 0) {
+      const originalPageLink = newDocument.createElement('a');
+      originalPageLink.setAttribute('href', originalUrl);
+      originalPageLink.textContent = headerText;
+
+      const promptHeader = newDocument.createElement('h1');
+      promptHeader.innerHTML = originalPageLink.outerHTML;
+      newDocument.body.appendChild(promptHeader);
+
+      const descriptionHeader = newDocument.createElement('h2');
+      descriptionHeader.textContent = 'Description';
+      newDocument.body.appendChild(descriptionHeader);
+
+      partHeader.textContent = 'Part One';
+    } else {
+      partHeader.textContent = headerText;
     }
 
-    headingElement.replaceWith(`<h3>${newHeadingElementText}</h3>`);
+    newDocument.body.appendChild(partHeader);
 
-    document(article)
-      .find('code > em:only-child')
-      .each((_, emInCodeBlock) => {
-        document(emInCodeBlock.parentNode).replaceWith(
-          `<code>${document(emInCodeBlock).text()}</code>`
-        );
-      });
-  });
+    article.removeChild(headerElement);
 
-  newDocument
-    .root()
-    .append(`<h1><a href="${originalUrl}">${dayTitle}</a></h1>`)
-    .append('<h2>Description</h2>')
-    .append(document('article'));
+    newDocument.body.appendChild(article);
+
+    article.querySelectorAll('code > em:only-child').map((e) => {
+      const newCodeElem = originalDocument.createElement('code');
+      newCodeElem.innerHTML = e.textContent;
+
+      e.parentNode.parentNode.replaceChild(newCodeElem, e.parentNode);
+    });
+  }
 
   const turndownService = new TurndownService({
     headingStyle: 'atx'
@@ -42,5 +62,5 @@ export const capturePage = (body: string, originalUrl: string) => {
   turndownService.use(gfm);
   turndownService.keep(['span']);
 
-  return turndownService.turndown(newDocument.html()).concat('\n');
+  return turndownService.turndown(newDocument.body.innerHTML).concat('\n');
 };
