@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "3": "cd ./years/2020/03 && npm run test",
-    "4": "cd ./years/2020/04 && npm run test",
-    "create-day": "cd ./utils && npm run create-day"
+    "create-day": "cd ./utils && npm run create-day",
+    "2020-4": "cd ./years/2020/04 && npm run test",
+    "2020-3": "cd ./years/2020/03 && npm run test"
   },
   "author": "pendo324",
   "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@tsconfig/node12": "^1.0.7",
-    "@types/node": "^14.14.10"
+    "@types/node": "^14.14.10",
+    "prettier": "^2.1.2"
   },
   "workspaces": [
     "./utils/",

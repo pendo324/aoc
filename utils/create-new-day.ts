@@ -7,6 +7,10 @@ import got from 'got';
 import * as dotenv from 'dotenv';
 import { CookieJar } from 'tough-cookie';
 
+// TODO: figure out a better way to get TypeScript to like local imports with extensions
+// @ts-ignore
+import { capturePage } from './page-to-markdown.ts';
+
 dotenv.config();
 
 let year = new Date().getFullYear() + '';
@@ -70,16 +74,24 @@ try {
 }
 
 // download input file from aoc
-const url = `https://adventofcode.com/${year}/day/${day}/input`;
+const baseUrl = `https://adventofcode.com/${year}/day/${day}`;
+const inputUrl = `${baseUrl}/input`;
 
 const cookieJar = new CookieJar();
 const setCookie = promisify(cookieJar.setCookie.bind(cookieJar));
-await setCookie(`session=${process.env.AOC_SESSION_COOKIE}`, url);
+await setCookie(`session=${process.env.AOC_SESSION_COOKIE}`, baseUrl);
 
-const response = await got(url, { cookieJar });
+const response = await got(inputUrl, { cookieJar });
 const inputFile = response.body;
 
 await writeFile(join(folderPath, 'input'), inputFile);
+
+const pageMarkdown = capturePage(
+  (await got(baseUrl, { cookieJar })).body,
+  baseUrl
+);
+
+await writeFile(join(folderPath, `${year}-${day}.md`), pageMarkdown);
 
 // add run script to root package file
 const rootPackagePath = join(
@@ -88,10 +100,14 @@ const rootPackagePath = join(
 );
 const rootPackageFile = JSON.parse(await readFile(rootPackagePath, 'utf8'));
 
-if (!!!rootPackageFile.scripts[day]) {
+const dayKey = `${year}-${day}`;
+if (!!!rootPackageFile.scripts[dayKey]) {
   rootPackageFile.scripts[
-    day
+    dayKey
   ] = `cd ./years/${year}/${paddedDay} && npm run test`;
 }
 
-await writeFile(rootPackagePath, `${JSON.stringify(rootPackageFile, null, 2)}\n`);
+await writeFile(
+  rootPackagePath,
+  `${JSON.stringify(rootPackageFile, null, 2)}\n`
+);

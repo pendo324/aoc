@@ -5,7 +5,9 @@
     "module": "esnext",
     "strict": false,
     "forceConsistentCasingInFileNames": false,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "lib": ["ESNext"]
   },
 
   "include": ["./years/**/**/*", "./utils/*"],
