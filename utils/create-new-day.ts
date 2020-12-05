@@ -91,7 +91,7 @@ const pageMarkdown = capturePage(
   baseUrl
 );
 
-await writeFile(join(folderPath, `${year}-${day}.md`), pageMarkdown);
+await writeFile(join(folderPath, `README.md`), pageMarkdown);
 
 // add run script to root package file
 const rootPackagePath = join(

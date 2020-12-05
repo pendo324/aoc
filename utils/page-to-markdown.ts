@@ -32,12 +32,12 @@ export const capturePage = (body: string, originalUrl: string) => {
 
   newDocument
     .root()
-    .append(`<h1>${dayTitle}</h1>`)
+    .append(`<h1><a href="${originalUrl}">${dayTitle}</a></h1>`)
     .append('<h2>Description</h2>')
     .append(document('article'));
 
   const turndownService = new TurndownService({
-    headingStyle: 'atx',
+    headingStyle: 'atx'
   });
   turndownService.use(gfm);
   turndownService.keep(['span']);
