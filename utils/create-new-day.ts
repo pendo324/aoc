@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'fs/promises';
+import { mkdir, readFile, stat, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
@@ -81,10 +81,48 @@ const cookieJar = new CookieJar();
 const setCookie = promisify(cookieJar.setCookie.bind(cookieJar));
 await setCookie(`session=${process.env.AOC_SESSION_COOKIE}`, baseUrl);
 
-const response = await got(inputUrl, { cookieJar });
-const inputFile = response.body;
+// only download the input file if it doesn't exist
+const inputFilePath = join(folderPath, 'input');
+let downloadedInputFile = false;
+try {
+  await stat(inputFilePath);
+} catch (e) {
+  if (e.code === 'ENOENT') {
+    try {
+      const response = await got(inputUrl, { cookieJar });
+      const inputFile = response.body;
 
-await writeFile(join(folderPath, 'input'), inputFile);
+      await writeFile(inputFilePath, inputFile);
+      downloadedInputFile = true;
+    } catch (innerError) {
+      if (innerError?.response?.statusCode === 404) {
+        console.log(
+          `The input file doesn't exist on the server. This usually means it was run before the prompt unlocked, or there was a problem with the input.`
+        );
+        const body = innerError?.response?.body;
+        if (body) {
+          console.log(`Error message from page: ${body}`);
+        }
+      } else if (innerError?.response?.statusCode === 403) {
+        console.log(
+          `Download forbidden. This usually means the token wasn't set properly. Re-check the .env file.`
+        );
+      } else {
+        throw e;
+      }
+    }
+  } else {
+    throw e;
+  }
+}
+
+if (downloadedInputFile) {
+  console.log(`Downloaded input file to ${inputFilePath}`);
+} else {
+  console.log(
+    `Skipped input file download since file exists at ${inputFilePath}`
+  );
+}
 
 const pageMarkdown = capturePage(
   (await got(baseUrl, { cookieJar })).body,
