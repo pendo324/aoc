@@ -13,13 +13,13 @@ import { capturePage } from './page-to-markdown.ts';
 
 dotenv.config();
 
-let year = new Date().getFullYear() + '';
+let year = new Date().getFullYear().toString(10);
 let day: string;
 if (process.argv.length === 3) {
   day = process.argv[2];
 } else if (process.argv.length === 4) {
   year = process.argv[2];
-  day = parseInt(process.argv[3]) + '';
+  day = parseInt(process.argv[3]).toString(10);
 } else if (process.argv.length === 2 || process.argv.length > 4) {
   throw 'Wrong number of arguments provided.';
 }
