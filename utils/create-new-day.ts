@@ -32,11 +32,16 @@ const folderPath = join(
 
 try {
   await mkdir(folderPath);
-} catch {
-  console.log('Folder already exists.');
+} catch (e) {
+  if (e.code === 'EEXIST') {
+    console.log('Folder already exists.');
+  } else {
+    throw e;
+  }
 }
 
-console.log('Writing or overwriting package.json file');
+const packageFilePath = join(folderPath, 'package.json');
+console.log(`Writing or overwriting package.json file at ${packageFilePath}`);
 
 const packageJson = `{
   "name": "@pendo324/aoc-${year}-${paddedDay}",
@@ -56,21 +61,39 @@ const packageJson = `{
 }
 `;
 
+await writeFile(packageFilePath, packageJson);
+
 const startingFile = `import { readFile } from 'fs/promises';
 
 const input = await readFile('./input', 'utf8');
 
 `;
 
-await writeFile(join(folderPath, 'package.json'), packageJson);
 // don't overwrite index.js, there might be a solution in there
+const indexPath = join(folderPath, 'index.ts');
+let inputFileExists = false;
+let wroteInputFile = true;
 try {
-  await writeFile(join(folderPath, 'index.ts'), startingFile, { flag: 'wx' });
+  await writeFile(indexPath, startingFile, { flag: 'wx' });
 } catch (e) {
-  if (e.code !== 'EEXIST') {
-    console.log('Skipping write to index.ts since it already exists');
+  wroteInputFile = false;
+  if (e.code === 'EEXIST') {
+    inputFileExists = true;
+  } else {
     throw e;
   }
+}
+
+if (!wroteInputFile) {
+  if (inputFileExists) {
+    console.log(
+      `Skipped write to index.ts since it already exists at ${indexPath}`
+    );
+  } else {
+    console.log(`Skipped write to index.ts because of unhandled error`);
+  }
+} else {
+  console.log(`Wrote index.ts to ${indexPath}`);
 }
 
 // download input file from aoc
