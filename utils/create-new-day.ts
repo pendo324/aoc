@@ -19,7 +19,7 @@ if (process.argv.length === 3) {
   day = process.argv[2];
 } else if (process.argv.length === 4) {
   year = process.argv[2];
-  day = process.argv[3];
+  day = parseInt(process.argv[3]) + '';
 } else if (process.argv.length === 2 || process.argv.length > 4) {
   throw 'Wrong number of arguments provided.';
 }
@@ -104,7 +104,7 @@ const dayKey = `${year}-${day}`;
 if (!!!rootPackageFile.scripts[dayKey]) {
   rootPackageFile.scripts[
     dayKey
-  ] = `cd ./years/${year}/${paddedDay} && npm run test`;
+  ] = `cd ./years/${year}/${paddedDay} && exitzero npm --loglevel silent run test`;
 }
 
 await writeFile(
