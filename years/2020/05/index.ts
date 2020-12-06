@@ -3,23 +3,18 @@ import { readFile } from 'fs/promises';
 const input = await readFile('./input', 'utf8');
 
 const split = input.split('\n');
+// remove trailing newline
+const trimmed = split.slice(0, split.length - 1);
 
-const seatIds = split
-  .map((l) => {
-    const row = l.slice(0, 7);
-    const noFs = row.replaceAll('F', '0');
-    const noBs = noFs.replaceAll('B', '1');
+const seatIds = trimmed.map((l) => {
+  const ones = l.replaceAll(/[FL]/g, '0');
+  const zeros = ones.replaceAll(/[BR]/g, '1');
 
-    const rowNumber = parseInt(noBs, 2);
+  const row = parseInt(zeros.slice(0, 7), 2);
+  const column = parseInt(zeros.slice(7), 2);
 
-    const column = l.slice(7);
-    const noRs = column.replaceAll('R', '1');
-    const noLs = noRs.replaceAll('L', '0');
-    const columnNumber = parseInt(noLs, 2);
-
-    return rowNumber * 8 + columnNumber;
-  })
-  .filter((n) => !Number.isNaN(n));
+  return row * 8 + column;
+});
 
 const sortedIds = seatIds.sort((a, b) => b - a);
 
