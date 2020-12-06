@@ -25,10 +25,14 @@ const sum = lengths.reduce((s, l) => {
 console.log(`Part one: ${sum}`);
 
 const groupEveryoneAns = groups
-  .map((group) => {
+  .map((group, i, arr) => {
     const answers = {};
     const split = group.split('\n');
-    const members = split.length;
+    let members = split.length;
+    // remove the trailing newline lol.
+    if (i === arr.length - 1) {
+      members = members - 1;
+    }
 
     for (let [_, ans] of split.entries()) {
       for (let letter of ans) {
