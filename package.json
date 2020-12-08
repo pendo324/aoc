@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "create-day": "cd ./utils && npm run create-day",
+    "2020-1": "cd ./years/2020/01 && exitzero npm --loglevel silent run test",
+    "2020-2": "cd ./years/2020/02 && exitzero npm --loglevel silent run test",
     "2020-3": "cd ./years/2020/03 && exitzero npm --loglevel silent run test",
     "2020-4": "cd ./years/2020/04 && exitzero npm --loglevel silent run test",
     "2020-5": "cd ./years/2020/05 && exitzero npm --loglevel silent run test",
-    "2020-6": "cd ./years/2020/06 && exitzero npm --loglevel silent run test"
+    "2020-6": "cd ./years/2020/06 && exitzero npm --loglevel silent run test",
+    "2020-7": "cd ./years/2020/07 && exitzero npm --loglevel silent run test"
   },
   "author": "pendo324",
   "license": "MIT",
