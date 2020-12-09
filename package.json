@@ -11,7 +11,8 @@
     "2020-4": "cd ./years/2020/04 && exitzero npm --loglevel silent run test",
     "2020-5": "cd ./years/2020/05 && exitzero npm --loglevel silent run test",
     "2020-6": "cd ./years/2020/06 && exitzero npm --loglevel silent run test",
-    "2020-7": "cd ./years/2020/07 && exitzero npm --loglevel silent run test"
+    "2020-7": "cd ./years/2020/07 && exitzero npm --loglevel silent run test",
+    "2020-8": "cd ./years/2020/08 && exitzero npm --loglevel silent run test"
   },
   "author": "pendo324",
   "license": "MIT",
