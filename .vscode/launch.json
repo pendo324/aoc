@@ -1,0 +1,79 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": ["${input:action}", "${input:year}", "${input:day}"]
+        }
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "id": "action",
+            "description": "Action",
+            "options": [
+                "create-day",
+                "run"
+            ],  
+            "default": "run"
+        },
+        {
+            "type": "pickString",
+            "id": "year",
+            "description": "Year",
+            "options": [
+              "2020",
+              "2021",
+              "2022",
+              "2023",
+            ],
+            "default": "2023"
+          },
+        {
+            "type": "pickString",
+            "id": "day",
+            "description": "Day",
+            "options": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30",
+                "31",
+            ],
+            "default": "1"
+        }
+    ]
+}

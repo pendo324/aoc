@@ -1,0 +1,50 @@
+package day
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/pendo324/aoc/cmd"
+	"github.com/spf13/cobra"
+)
+
+func day(cmd *cobra.Command, _ []string) error {
+	in, err := os.ReadFile(filepath.Join("years", "{{ .Year }}", "{{ .FullDay }}", "input"))
+	if err != nil {
+		return fmt.Errorf("failed to open input: %w", err)
+	}
+
+	if err := part1(string(in)); err != nil {
+		return fmt.Errorf("failed to run part1: %w", err)
+	}
+	if err := part2(string(in)); err != nil {
+		return fmt.Errorf("failed to run part2: %w", err)
+	}
+
+	return nil
+}
+
+func part1(in string) error {
+	fmt.Printf("Part One: %d\n", 0)
+
+	return nil
+}
+
+func part2(in string) error {
+	fmt.Printf("Part Two: %d\n", 0)
+
+	return nil
+}
+
+func init() {
+	cmd.RegisterYearDay(
+		cmd.RunDayCmd,
+		&cobra.Command{
+			Use:  "{{ .Day }}",
+			RunE: day,
+		},
+		"{{ .Year }}",
+		"{{ .Day }}",
+	)
+}
