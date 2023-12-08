@@ -74,15 +74,12 @@ func part2(in string) error {
 		).FindStringSubmatch(row)
 		w := m[1:11]
 		h := m[11:]
-
-		for i := 0; i < v; i++ {
-			matches := 0
-			for _, j := range h {
-				for _, n := range w {
-					if j == n {
-						r[id+1+matches] += 1
-						matches++
-					}
+		matches := 0
+		for _, j := range h {
+			for _, n := range w {
+				if j == n {
+					r[id+1+matches] += v
+					matches++
 				}
 			}
 		}
